@@ -1,0 +1,53 @@
+:host { display: block; min-width: 0; }
+.metric-card {
+  min-height: 466px; padding: 18px 18px 13px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--surface);
+  box-shadow: 0 3px 12px rgba(24, 37, 61, .025);
+}
+.card-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.metric-heading { display: flex; align-items: center; gap: 10px; }
+.metric-symbol { width: 33px; height: 33px; display: grid; place-items: center; border-radius: 8px; color: var(--metric-color); background: color-mix(in srgb, var(--metric-color) 10%, transparent); }
+.metric-symbol svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.metric-heading h2 { margin: 0 0 3px; font-size: 13px; font-weight: 700; letter-spacing: -.15px; }
+.metric-heading div > span { color: var(--muted); font-size: 9px; }
+.status-pill { display: flex; align-items: center; gap: 5px; padding: 5px 7px; border-radius: 20px; color: #28825e; background: #eaf6f0; font-size: 9px; font-weight: 650; white-space: nowrap; }
+.status-pill > span { width: 5px; height: 5px; border-radius: 50%; background: #2ca87a; }
+.status-pill.warning { color: #a66e1d; background: #fff5e6; }
+.status-pill.warning > span { background: #d89a37; }
+.status-pill.critical { color: #b74545; background: #fceced; }
+.status-pill.critical > span { background: #d35559; }
+.gauge-row { display: flex; justify-content: center; align-items: center; gap: clamp(17px, 2.3vw, 31px); padding: 20px 3px 17px; }
+.gauge {
+  flex: 0 0 123px; width: 123px; height: 123px; display: grid; place-items: center;
+  position: relative;
+}
+.gauge-ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.gauge-track, .gauge-progress { fill: none; stroke-width: 7; }
+.gauge-track { stroke: var(--gauge-track); }
+.gauge-progress { stroke: var(--metric-color); stroke-linecap: round; stroke-dasharray: 307.88; transition: stroke-dashoffset .45s ease; }
+.gauge-inner { z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.gauge-value { font-size: 25px; line-height: 1.1; font-weight: 700; letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+.gauge-unit { color: var(--muted); font-size: 10px; }
+.reading { min-width: 0; }
+.reading-label { color: var(--muted); font-size: 8px; font-weight: 700; letter-spacing: .75px; }
+.reading-value { margin: 5px 0 6px; font-size: clamp(21px, 2vw, 27px); font-weight: 700; letter-spacing: -1px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.reading-value span { margin-left: 4px; color: var(--muted); font-size: 11px; font-weight: 500; letter-spacing: 0; }
+.reading-updated { display: flex; align-items: center; gap: 5px; color: var(--muted); font-size: 9px; white-space: nowrap; }
+.reading-pulse { width: 5px; height: 5px; border-radius: 50%; background: #37af7c; }
+.unit-picker { display: flex; align-items: center; gap: 7px; margin-top: 12px; }
+.unit-picker > span { color: var(--muted); font-size: 9px; }
+.unit-picker select { max-width: 83px; border: 1px solid var(--border); border-radius: 5px; outline: none; padding: 4px 19px 4px 6px; background: var(--surface); color: var(--text); font: inherit; font-size: 9px; cursor: pointer; }
+.unit-picker select:focus { border-color: var(--metric-color); }
+.chart-section { border-top: 1px solid var(--border); padding-top: 13px; }
+.chart-heading { display: flex; justify-content: space-between; align-items: flex-start; }
+.chart-heading > div { display: flex; flex-direction: column; gap: 3px; }
+.chart-heading strong { font-size: 10px; font-weight: 700; }
+.chart-heading > div > span { color: var(--muted); font-size: 8px; }
+.reset-zoom { border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 8px; cursor: pointer; }
+.reset-zoom:hover { color: var(--metric-color); }
+.chart-wrap { height: 100px; margin: 6px -4px 0; }
+.chart-hint { display: flex; justify-content: space-between; margin-top: 1px; color: var(--muted); opacity: .8; font-size: 8px; }
+@media (max-width: 900px) and (min-width: 621px) {
+  .metric-card { min-height: 455px; }
+  .gauge-row { gap: 17px; }
+}

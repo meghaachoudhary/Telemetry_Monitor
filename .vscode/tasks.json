@@ -1,0 +1,75 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build Angular frontend",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"frontend",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Build telemetry API",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"--prefix",
+				"backend",
+				"run",
+				"build"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Type-check Angular sources",
+			"type": "shell",
+			"command": "./frontend/node_modules/.bin/tsc",
+			"args": [
+				"--noEmit",
+				"-p",
+				"frontend/tsconfig.app.json"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Type-check Angular tests",
+			"type": "shell",
+			"command": "./frontend/node_modules/.bin/tsc",
+			"args": [
+				"--noEmit",
+				"-p",
+				"frontend/tsconfig.spec.json"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "Angular template type-check",
+			"type": "shell",
+			"command": "./frontend/node_modules/.bin/ngc",
+			"args": [
+				"--noEmit",
+				"-p",
+				"frontend/tsconfig.app.json"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		}
+	]
+}

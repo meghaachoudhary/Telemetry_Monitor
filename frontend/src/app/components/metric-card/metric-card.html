@@ -1,0 +1,44 @@
+<article class="metric-card" [style.--metric-color]="color">
+  <header class="card-header">
+    <div class="metric-heading">
+      <span class="metric-symbol" [class]="parameter" aria-hidden="true">
+        <svg *ngIf="parameter === 'velocity'" viewBox="0 0 24 24"><path d="M3 8h11M2 12h15M4 16h12M17 5l4 7-4 7"/></svg>
+        <svg *ngIf="parameter === 'pressure'" viewBox="0 0 24 24"><path d="M4 17a8 8 0 1 1 16 0M12 13l4-4M6 17h12M12 4v2"/></svg>
+        <svg *ngIf="parameter === 'temperature'" viewBox="0 0 24 24"><path d="M14 14.8V5a3 3 0 0 0-6 0v9.8a5 5 0 1 0 6 0ZM11 7v11"/></svg>
+      </span>
+      <div><h2>{{ title }}</h2><span>{{ description }}</span></div>
+    </div>
+    <span class="status-pill" [class.warning]="status === 'Warning'" [class.critical]="status === 'Critical'">
+      <span></span>{{ status }}
+    </span>
+  </header>
+
+  <div class="gauge-row">
+    <div class="gauge" [ngStyle]="gaugeStyle" role="img" [attr.aria-label]="title + ' gauge: ' + (value | number:'1.1-1') + ' ' + unit">
+      <svg class="gauge-ring" viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="gauge-track" cx="60" cy="60" r="49" />
+        <circle class="gauge-progress" cx="60" cy="60" r="49" [style.stroke-dashoffset]="gaugeOffset" />
+      </svg>
+      <div class="gauge-inner"><span class="gauge-value">{{ value | number:'1.1-1' }}</span><span class="gauge-unit">{{ unit }}</span></div>
+    </div>
+    <div class="reading">
+      <span class="reading-label">CURRENT READING</span>
+      <div class="reading-value">{{ value | number:'1.1-1' }}<span>{{ unit }}</span></div>
+      <div class="reading-updated"><span class="reading-pulse"></span>Updated {{ timeUpdated ? (timeUpdated | date:'HH:mm:ss') : '—' }}</div>
+      <label class="unit-picker">
+        <span>Display unit</span>
+        <select [value]="unit" (change)="onUnitSelect($event)" [attr.aria-label]="'Select ' + title + ' unit'">
+          <option *ngFor="let option of unitOptions" [value]="option">{{ option }}</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <section class="chart-section" [attr.aria-label]="title + ' live trend chart'">
+    <div class="chart-heading"><div><strong>Live trend</strong><span>Last {{ metric.history.length }} samples</span></div>
+      <button type="button" class="reset-zoom" (click)="resetZoom()" title="Reset chart zoom">Reset zoom</button>
+    </div>
+    <div class="chart-wrap"><canvas #chartCanvas></canvas></div>
+    <div class="chart-hint"><span>Scroll to zoom</span><span>Shift + drag to pan</span></div>
+  </section>
+</article>

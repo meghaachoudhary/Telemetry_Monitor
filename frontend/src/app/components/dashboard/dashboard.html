@@ -1,0 +1,92 @@
+<main class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Telemetry home">
+      <span class="brand-mark" aria-hidden="true">◈</span>
+      <span>northstar<span class="brand-light"> / control</span></span>
+    </a>
+    <div class="topbar-actions">
+      <div class="connection" [class.is-online]="connection === 'online'" [class.is-offline]="connection === 'offline'">
+        <span class="connection-dot"></span>
+        <span>{{ connection === 'online' ? 'System online' : connection === 'offline' ? 'Connection lost' : 'Connecting' }}</span>
+      </div>
+      <span class="topbar-divider"></span>
+      <button class="theme-button" type="button" (click)="toggleTheme()" [attr.aria-label]="'Switch to ' + (theme === 'light' ? 'dark' : 'light') + ' theme'">
+        <span aria-hidden="true">{{ theme === 'light' ? '◐' : '☼' }}</span>
+        <span>{{ theme === 'light' ? 'Dark mode' : 'Light mode' }}</span>
+      </button>
+      <div class="avatar" title="Operator">OP</div>
+    </div>
+  </header>
+
+  <section class="dashboard-content">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-line"></span> EMBEDDED SYSTEMS / UNIT 04</div>
+        <h1>Controller overview</h1>
+        <p class="page-subtitle">Real-time performance and telemetry</p>
+      </div>
+      <div class="heading-meta">
+        <span class="live-indicator"><span></span> LIVE</span>
+        <span class="updated-label">Last update</span>
+        <strong>{{ lastUpdated ? (lastUpdated | date:'HH:mm:ss') : '—' }}</strong>
+      </div>
+    </div>
+
+    <div class="system-banner" *ngIf="connection === 'offline'">
+      <span class="banner-icon" aria-hidden="true">!</span>
+      <div><strong>Telemetry unavailable</strong><span>{{ errorMessage }}</span></div>
+      <span class="retry-label">Retrying</span>
+    </div>
+
+    <div class="loading-panel" *ngIf="loading">
+      <span class="loading-spinner"></span>
+      <strong>Connecting to controller</strong>
+      <span>Waiting for the first telemetry reading…</span>
+    </div>
+
+    <section class="metrics-grid" *ngIf="dashboard as data">
+      <app-metric-card
+        [parameter]="'velocity'"
+        [metric]="data.velocity"
+        [unit]="units.velocity"
+        [unitOptions]="unitOptions.velocity"
+        [updatedAt]="data.timestamp"
+        (unitChange)="changeUnit('velocity', $event)" />
+      <app-metric-card
+        [parameter]="'pressure'"
+        [metric]="data.pressure"
+        [unit]="units.pressure"
+        [unitOptions]="unitOptions.pressure"
+        [updatedAt]="data.timestamp"
+        (unitChange)="changeUnit('pressure', $event)" />
+      <app-metric-card
+        [parameter]="'temperature'"
+        [metric]="data.temperature"
+        [unit]="units.temperature"
+        [unitOptions]="unitOptions.temperature"
+        [updatedAt]="data.timestamp"
+        (unitChange)="changeUnit('temperature', $event)" />
+    </section>
+
+    <section class="empty-error" *ngIf="!loading && !dashboard && connection === 'offline'">
+      <span aria-hidden="true">⌁</span>
+      <strong>No telemetry received</strong>
+      <p>Check that the local telemetry service is running on port 3000.</p>
+    </section>
+
+    <p class="export-error" *ngIf="exportError" role="alert">{{ exportError }}</p>
+
+    <footer class="dashboard-footer" *ngIf="dashboard">
+      <div class="footer-note"><span class="footer-live"></span> Sampling every 1 second <span class="footer-separator">·</span> Rolling window: 100 samples</div>
+      <div class="export-actions">
+        <span>Export data</span>
+        <button type="button" class="export-button" (click)="exportCsv()" aria-label="Export telemetry as CSV">
+          <span class="file-icon csv-icon">C</span> CSV
+        </button>
+        <button type="button" class="export-button" (click)="exportExcel()" aria-label="Export telemetry as Excel">
+          <span class="file-icon excel-icon">X</span> Excel
+        </button>
+      </div>
+    </footer>
+  </section>
+</main>
