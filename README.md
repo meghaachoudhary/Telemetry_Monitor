@@ -7,36 +7,25 @@ A real-time embedded-controller monitoring desktop app built with Angular, Elect
 - Node.js 22.22.3+ (or 24.15.0+) and npm
 - Windows, macOS, or Linux for development; Electron targets the host platform
 
-## Run in development
+## Run the application
 
-Install each workspace's dependencies once:
+Install all frontend, backend, and desktop dependencies once from the project root:
 
 ```bash
-cd backend
-npm install
-cd ../frontend
 npm install
 ```
 
-Start the API in one terminal:
+Start the telemetry API, Angular development server, and Electron window together with one command:
 
 ```bash
-cd backend
 npm run dev
 ```
 
-Start the Angular app and desktop window in a second terminal:
-
-```bash
-cd frontend
-npm run electron:dev
-```
-
-The API is available at `http://localhost:3000/api/dashboard`. To use the browser instead of Electron, run `npm start` in `frontend` and open `http://localhost:4200`.
+The API is available at `http://localhost:3000/api/dashboard`. To run the dashboard in a browser instead of Electron, use `npm run dev:api` in one terminal and `npm run dev:web` in another, then open `http://localhost:4200`.
 
 ## Production build
 
-Build the Angular frontend with `cd frontend && npm run build`. Build the API with `cd backend && npm run build`, then run it with `npm start` from `backend`. The Electron main process loads the generated Angular page when packaged; run `npm run electron` from `frontend` for the desktop shell.
+Build the Angular frontend and API with `npm run build`. Start the built API with `npm run start:api`; launch the Electron shell from the project root with `npm run electron`.
 
 The API must be running separately from the desktop application. It generates telemetry every second, varies each value by up to approximately 10%, nudges readings toward their baselines every fifth update, and retains the latest 100 samples per metric.
 
@@ -46,7 +35,7 @@ The API must be running separately from the desktop application. It generates te
 - **Charts:** Chart.js renders independent rolling 100-sample trends. The zoom plugin provides wheel/pinch zoom and Shift-drag pan; tooltip values and axis labels use the selected display unit. Unit conversion happens in the renderer and does not make API requests.
 - **Gauges and status:** Lightweight SVG/CSS gauges animate without another charting dependency. Status thresholds are evaluated in the API's base units, so changing display units never changes status.
 - **Exports:** CSV is generated in the browser. ExcelJS creates an `.xlsx` workbook. Both contain timestamps and all three readings, converted into the currently selected units.
-- **Desktop:** Electron hosts the Angular app with context isolation, sandboxing, and Node integration disabled. The API runs as a separate local service.
+- **Desktop:** Electron hosts the Angular app with context isolation, sandboxing, and Node integration disabled. The API runs as a separate local service. All dependencies and scripts are managed by the single root `package.json`.
 - **Themes:** Light/dark theme variables are applied at runtime and the preference is saved in local storage.
 
 ## Assumptions
